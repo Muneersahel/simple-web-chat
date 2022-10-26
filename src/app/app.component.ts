@@ -1,11 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { UserNameFormComponent } from './resources/user-name-form/user-name-form.component';
+import { UserFormComponent } from './resources/user-form/user-form.component';
+import { Store } from '@ngrx/store';
+import { AppStateInterface } from '@utils/interfaces/app-state.interface';
+import { fromEvent, map, Observable, Subject, takeUntil } from 'rxjs';
+import { UserInterface } from '@utils/interfaces/user.interface';
+import { UserActions } from '@store/user/user.action';
+import { MessageActions } from '@store/message/message.action';
+import { ChatInputComponent } from '@resources/chat-input/chat-input.component';
 
 @Component({
   selector: 'app-root',
@@ -17,16 +24,20 @@ import { UserNameFormComponent } from './resources/user-name-form/user-name-form
     MatCardModule,
     MatIconModule,
     MatToolbarModule,
-    FormsModule,
     MatDialogModule,
+    ChatInputComponent,
   ],
 })
-export class AppComponent implements OnInit {
-  message: string = '';
-  messages: { sender: string; text: string; time: Date }[] = [].reverse();
-  title = 'simple-web-chat';
+export class AppComponent implements OnInit, OnDestroy {
+  destroy$ = new Subject<void>();
+  title = 'Simple Web Chat';
+  user$ = this.store.select((state) => state.userState.user);
+  messages$ = this.store.select((state) => state.messageState.messages);
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private store: Store<AppStateInterface>
+  ) {}
 
   ngOnInit() {
     screen.orientation.lock('portrait');
@@ -34,26 +45,40 @@ export class AppComponent implements OnInit {
       screen.orientation.lock('portrait');
     });
 
-    // todo: check if there is no username saved
-    this.openUserNameForm();
+    this.store.dispatch(UserActions.getUser());
+    this.isUserPresent
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isUserPresent) => {
+        if (!isUserPresent) {
+          this.openUserNameForm();
+        }
+      });
+    this.store.dispatch(MessageActions.getMessages());
+    this.detectStorageChanges();
+  }
+
+  detectStorageChanges() {
+    fromEvent<StorageEvent>(window, 'storage').subscribe((evt) => {
+      if (evt.newValue) {
+        this.store.dispatch(MessageActions.getMessages());
+      }
+    });
+  }
+
+  get isUserPresent() {
+    return this.store.select((state) => state.userState.user !== null);
   }
 
   openUserNameForm() {
-    const dialogRef = this.dialog.open(UserNameFormComponent, {
+    const dialogRef = this.dialog.open(UserFormComponent, {
       width: '500px',
       maxWidth: '95vw',
       disableClose: true,
     });
   }
 
-  sendMessage() {
-    this.messages.unshift({
-      sender: 'John Abruzzi',
-      text: this.message,
-      time: new Date(),
-    });
-
-    this.message = '';
-    console.log(this.messages);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
