@@ -4,6 +4,6 @@ export interface UserInterface {
 
 export interface UserStateInterface {
   loading: boolean;
-  username: UserInterface | null;
+  user: UserInterface | null;
   error: string | null;
 }

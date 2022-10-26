@@ -5,7 +5,7 @@ class UserActionsClass {
   getUser = createAction('[User] Get user');
   getUserSuccess = createAction(
     '[User] Get user success',
-    props<{ user: UserInterface }>()
+    props<{ user: UserInterface | null }>()
   );
   getUserError = createAction(
     '[User] Get user error',

@@ -6,11 +6,14 @@
     </mat-card-title>
 
     <!-- chat messages -->
-    <mat-card-content class="p-3 chat-messages p-0 d-flex flex-column-reverse">
+    <mat-card-content
+      class="p-3 chat-messages p-0 d-flex flex-column-reverse"
+      *ngIf="messages$ | async as messages"
+    >
       <!-- Check if there is no message -->
       <ng-container *ngIf="messages.length === 0; else Message">
         <div class="m-auto">
-          <h3 class="text-muted">No messages yet</h3>
+          <h3 class="text-muted">No messages yet, start chatting!</h3>
         </div>
       </ng-container>
 
@@ -18,7 +21,9 @@
       <ng-template #Message>
         <div
           class="message"
-          [ngClass]="{ 'message-own': message.sender === 'John Abruzziy' }"
+          [ngClass]="{
+            'message-own': (user$ | async)?.username === message.sender.username
+          }"
           *ngFor="let message of messages"
         >
           <!-- <img
@@ -29,7 +34,7 @@
           <div class="message-content">
             <!-- sender -->
             <div class="fw-bold mb-1">
-              <span>{{ message.sender }}</span>
+              <span>{{ message.sender.username }}</span>
             </div>
             <div class="m-0">{{ message.text }}</div>
             <div class="message-time m-0 text-end text-muted">
@@ -40,28 +45,8 @@
       </ng-template>
     </mat-card-content>
 
-    <mat-card-footer class="mat-elevation-z6">
-      <!-- Chat Input -->
-      <div
-        class="chat-input d-flex justify-content-center align-items-center p-3"
-      >
-        <form (ngSubmit)="sendMessage()">
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Type a message"
-              [(ngModel)]="message"
-              name="message"
-              autocomplete="off"
-              required
-            />
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="submit">Send</button>
-            </div>
-          </div>
-        </form>
-      </div>
+    <mat-card-footer class="mat-elevation-z6" *ngIf="user$ | async as user">
+      <app-chat-input [username]="user.username"></app-chat-input>
     </mat-card-footer>
   </mat-card>
 </section>
