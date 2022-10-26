@@ -1,0 +1,86 @@
+/** Mat Card */
+.mat-card {
+  max-width: 600px;
+  height: calc(100vh - 2rem);
+  max-height: calc(100vh - 2rem);
+  .mat-card-content {
+    background-color: #fafafa;
+  }
+  .mat-card-content > :last-child:not(.mat-card-footer) {
+    margin-bottom: 10px;
+  }
+  .mat-card-title,
+  .mat-card-footer {
+    position: sticky;
+  }
+  .mat-card-title {
+    top: 0;
+    background: white;
+    z-index: 1;
+  }
+  .mat-card-footer {
+    bottom: 0;
+    background: white;
+  }
+}
+
+/** Chat Messages  */
+.chat-messages {
+  height: calc(100% - 8rem);
+  overflow-y: auto;
+  .message {
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: #007bff4c;
+    max-width: 80%;
+    align-self: flex-start;
+    word-wrap: break-word;
+    .message-image {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .message-own {
+      background-color: #e6e6e6;
+      align-self: flex-end;
+    }
+    .message-content {
+      padding: 10px;
+      .message-time {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+/** Chat Input */
+.chat-input {
+  .input-group {
+    flex: 1;
+    gap: 10px;
+  }
+  .input-group .form-control {
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .input-group .form-control:focus {
+    box-shadow: none;
+  }
+  .input-group .input-group-append .btn {
+    border-radius: 20px;
+    background-color: #007bff;
+    color: #fff;
+  }
+  .input-group .input-group-append .btn:hover {
+    background-color: #0069d9;
+  }
+  .input-group .input-group-append .btn:focus {
+    box-shadow: none;
+  }
+  .input-group .input-group-append .btn:active {
+    background-color: #0062cc;
+  }
+  .button {
+    width: 100px;
+  }
+}
