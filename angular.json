@@ -96,6 +96,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "simple-web-chat:build:production",
+            "firebaseProject": "ng-simple-web-chat",
+            "firebaseHostingSite": "ng-simple-web-chat"
+          }
         }
       }
     }
