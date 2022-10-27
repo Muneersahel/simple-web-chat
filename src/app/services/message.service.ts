@@ -9,10 +9,12 @@ import { StorageService } from './storage.service';
 export class MessageService {
   constructor(private storageService: StorageService) {}
 
-  createMessage(message: MessageInterface) {
-    const messages = this.storageService.getObj(this.storageService.messageKey);
-    if (messages) {
-      messages.push(message);
+  addMessage(message: MessageInterface) {
+    const messages: MessageInterface[] | null = this.storageService.getObj(
+      this.storageService.messageKey
+    );
+    if (messages !== null) {
+      messages.unshift(message);
       this.storageService.setObj(this.storageService.messageKey, messages);
     } else {
       this.storageService.setObj(this.storageService.messageKey, [message]);
@@ -20,11 +22,19 @@ export class MessageService {
     return of(message);
   }
 
-  getMessages() {
+  getMessages(pageSize: number, page: number) {
     const messages = this.storageService.getObj(this.storageService.messageKey);
-    if (messages === null) {
-      return of([]);
+    if (messages !== null) {
+      const count: number = messages.length;
+      const start = pageSize * page;
+      const end = start + pageSize;
+
+      return of({ messages: messages.slice(start, end), count });
+    } else {
+      return of({
+        messages: [] as MessageInterface[],
+        count: 0 as number,
+      });
     }
-    return of(messages.reverse());
   }
 }

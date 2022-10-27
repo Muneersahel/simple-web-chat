@@ -6,9 +6,17 @@
     </mat-card-title>
 
     <!-- chat messages -->
+    <div *ngIf="isLoading" class="loading">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
     <mat-card-content
       class="p-3 chat-messages p-0 d-flex flex-column-reverse"
       *ngIf="messages$ | async as messages"
+      infiniteScroll
+      [infiniteScrollUpDistance]="9.9"
+      [scrollWindow]="false"
+      [infiniteScrollThrottle]="1500"
+      (scrolledUp)="onScrollUp()"
     >
       <!-- Check if there is no message -->
       <ng-container *ngIf="messages.length === 0; else Message">

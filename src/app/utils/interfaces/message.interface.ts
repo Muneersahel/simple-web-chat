@@ -10,4 +10,5 @@ export interface MessageStateInterface {
   messages: MessageInterface[];
   loading: boolean;
   error: string | null;
+  count: number;
 }

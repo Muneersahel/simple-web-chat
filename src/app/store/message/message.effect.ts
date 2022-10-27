@@ -13,15 +13,15 @@ export class MessageEffect {
 
   createMessage$ = createEffect(() =>
     this.actions.pipe(
-      ofType(MessageActions.createMessage),
+      ofType(MessageActions.addMessage),
       mergeMap((action) => {
-        return this.messageService.createMessage(action.message).pipe(
+        return this.messageService.addMessage(action.message).pipe(
           map((res) => {
-            return MessageActions.createMessageSuccess({ message: res });
+            return MessageActions.addMessageSuccess({ message: res });
           }),
           catchError((_error) => {
             return of(
-              MessageActions.createMessageError({
+              MessageActions.addMessageError({
                 error: 'Could not create user, please try again',
               })
             );
@@ -34,19 +34,24 @@ export class MessageEffect {
   getMessages$ = createEffect(() =>
     this.actions.pipe(
       ofType(MessageActions.getMessages),
-      mergeMap(() => {
-        return this.messageService.getMessages().pipe(
-          map((res) => {
-            return MessageActions.getMessagesSuccess({ messages: res });
-          }),
-          catchError((_error) => {
-            return of(
-              MessageActions.getMessagesError({
-                error: 'Could not get user, please try again',
-              })
-            );
-          })
-        );
+      mergeMap((action) => {
+        return this.messageService
+          .getMessages(action.pageSize, action.page)
+          .pipe(
+            map((res) => {
+              return MessageActions.getMessagesSuccess({
+                messages: res.messages,
+                count: res.count,
+              });
+            }),
+            catchError((_error) => {
+              return of(
+                MessageActions.getMessagesError({
+                  error: 'Could not get user, please try again',
+                })
+              );
+            })
+          );
       })
     )
   );
