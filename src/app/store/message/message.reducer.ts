@@ -6,21 +6,22 @@ const initialState: MessageStateInterface = {
   loading: false,
   messages: [],
   error: null,
+  count: 0,
 };
 
 export const messageReducer = createReducer(
   initialState,
-  on(MessageActions.createMessage, (state) => ({
+  on(MessageActions.addMessage, (state) => ({
     ...state,
     loading: true,
     error: null,
   })),
-  on(MessageActions.createMessageSuccess, (state, action) => ({
+  on(MessageActions.addMessageSuccess, (state, action) => ({
     ...state,
     loading: false,
     messages: [action.message, ...state.messages],
   })),
-  on(MessageActions.createMessageError, (state, action) => ({
+  on(MessageActions.addMessageError, (state, action) => ({
     ...state,
     loading: false,
     error: action.error,
@@ -34,7 +35,8 @@ export const messageReducer = createReducer(
   on(MessageActions.getMessagesSuccess, (state, action) => ({
     ...state,
     loading: false,
-    messages: action.messages,
+    messages: [...state.messages, ...action.messages],
+    count: action.count,
   })),
   on(MessageActions.getMessagesError, (state, action) => ({
     ...state,

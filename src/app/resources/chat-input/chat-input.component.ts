@@ -38,11 +38,13 @@ export class ChatInputComponent implements OnInit {
         },
       };
       this.store.dispatch(
-        MessageActions.createMessage({
+        MessageActions.addMessage({
           message: messageItem,
         })
       );
       this.message = '';
+      const container = document.querySelector('.chat-messages');
+      container!.scrollTop = container!.scrollHeight;
     }
     this.messages.unshift({
       sender: { username: 'John Abruzzi' },
