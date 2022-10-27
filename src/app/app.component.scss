@@ -1,0 +1,66 @@
+/** Mat Card */
+.mat-card {
+  max-width: 600px;
+  height: calc(100vh - 2rem);
+  max-height: calc(100vh - 2rem);
+  .mat-card-content {
+    background-color: #fafafa;
+  }
+  .mat-card-content > :last-child:not(.mat-card-footer) {
+    margin-bottom: 10px;
+  }
+  .mat-card-title,
+  .mat-card-footer {
+    position: sticky;
+  }
+  .mat-card-title {
+    top: 0;
+    background: white;
+    z-index: 1;
+  }
+  .mat-card-footer {
+    bottom: 0;
+    background: white;
+  }
+}
+
+/** Chat Messages  */
+.chat-messages {
+  height: calc(100% - 8rem);
+  overflow-y: auto;
+  .message {
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: #007bff4c;
+    max-width: 80%;
+    align-self: flex-start;
+    word-wrap: break-word;
+    .message-image {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .message-content {
+      padding: 10px;
+      .message-time {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  .message-own {
+    background-color: #e6e6e6;
+    align-self: flex-end;
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}

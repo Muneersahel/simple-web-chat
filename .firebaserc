@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ng-simple-web-chat": {
+      "hosting": {
+        "simple-web-chat": [
+          "ng-simple-web-chat"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ng-simple-web-chat"
+  }
+}
